@@ -24,7 +24,7 @@ const CreateUser = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3001/createUser", formData)
+      .post("https://talenthub-qdnv.onrender.com/createUser", formData)
       .then((response) => {
         console.log("Candidate added:", response.data);
         navigate("/");

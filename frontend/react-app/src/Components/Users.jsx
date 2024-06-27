@@ -17,14 +17,6 @@ function Users() {
     codingInterviewResults: "",
   });
 
-  //before search
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3001")
-  //     .then((result) => setUsers(result.data))
-  //     .catch((err) => console.log(err));
-  // }, []);
-
   //search
   useEffect(() => {
     const {
@@ -37,7 +29,7 @@ function Users() {
     } = searchTerms;
     axios
       .get(
-        `http://localhost:3001?name=${name}&skills=${skills}&yearsOfExperience=${yearsOfExperience}&location=${location}&videoInterviewResults=${videoInterviewResults}&codingInterviewResults=${codingInterviewResults}`
+        `https://talenthub-qdnv.onrender.com?name=${name}&skills=${skills}&yearsOfExperience=${yearsOfExperience}&location=${location}&videoInterviewResults=${videoInterviewResults}&codingInterviewResults=${codingInterviewResults}`
       )
       .then((result) => setUsers(result.data))
       .catch((err) => console.log(err));
@@ -45,7 +37,7 @@ function Users() {
 
   const handleDelete = (id) => {
     axios
-      .delete("http://localhost:3001/deleteUser/" + id)
+      .delete("https://talenthub-qdnv.onrender.com/deleteUser/" + id)
       .then((res) => {
         console.log(res);
         window.location.reload();

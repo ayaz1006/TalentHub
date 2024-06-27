@@ -17,7 +17,7 @@ function UpdateUser() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/getUser/" + id)
+      .get("https://talenthub-qdnv.onrender.com/getUser/" + id)
       .then((result) => {
         console.log(result);
         setName(result.data.name);
@@ -33,7 +33,7 @@ function UpdateUser() {
   const handleUpdate = (e) => {
     e.preventDefault();
     axios
-      .put("http://localhost:3001/updateUser/" + id, {
+      .put("https://talenthub-qdnv.onrender.com/updateUser/" + id, {
         name,
         skills,
         yearsOfExperience,
