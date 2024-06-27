@@ -9,12 +9,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+require("dotenv").config(); // Load environment variables from .env file
+
 //local db (compass)
 // mongoose.connect("mongodb://localhost:27017/usersDB");
 
 // MongoDB Atlas connection string
-const uri =
-  "mongodb+srv://ayazali9910:!1Qwerty!1@cluster0.l44p2f8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.MONGODB_URI;
 mongoose.connect(uri);
 const connection = mongoose.connection;
 connection.once("open", () => {
