@@ -65,7 +65,7 @@ function Users() {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-5" style={{ transform: "scale(0.9)" }}>
       <div className="card shadow">
         <div className="card-body">
           <h2 className="card-title text-center mb-4">Users List</h2>
@@ -74,6 +74,7 @@ function Users() {
               <input
                 type="text"
                 className="form-control"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 placeholder="Search by Name"
                 name="name"
                 value={filterOptions.name || ""}
@@ -83,6 +84,7 @@ function Users() {
             <div className="col-md-3">
               <select
                 className="form-control"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 name="skills"
                 value={filterOptions.skills || ""}
                 onChange={handleInputChange}
@@ -102,26 +104,23 @@ function Users() {
             <div className="col-md-3">
               <select
                 className="form-control"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 name="yearsOfExperience"
                 value={filterOptions.yearsOfExperience || ""}
                 onChange={handleInputChange}
               >
                 <option value="">Select Years of Experience</option>
-                <option value="1">1 year</option>
-                <option value="2">2 years</option>
-                <option value="3">3 years</option>
-                <option value="4">4 years</option>
-                <option value="5">5 years</option>
-                <option value="6">6 years</option>
-                <option value="7">7 years</option>
-                <option value="8">8 years</option>
-                <option value="9">9 years</option>
-                <option value="10">10 years</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((years) => (
+                  <option key={years} value={years}>
+                    {years} year{years !== 1 ? "s" : ""}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="col-md-3">
               <select
                 className="form-control"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 name="location"
                 value={filterOptions.location || ""}
                 onChange={handleInputChange}
@@ -140,6 +139,7 @@ function Users() {
             <div className="col-md-3">
               <select
                 className="form-control"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 name="videoInterviewResults"
                 value={filterOptions.videoInterviewResults || ""}
                 onChange={handleInputChange}
@@ -152,6 +152,7 @@ function Users() {
             <div className="col-md-3">
               <select
                 className="form-control"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 name="codingInterviewResults"
                 value={filterOptions.codingInterviewResults || ""}
                 onChange={handleInputChange}
@@ -163,7 +164,8 @@ function Users() {
             </div>
             <div className="col-md-3">
               <button
-                className="btn btn-secondary w-100"
+                className="btn btn-secondary"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 onClick={clearFilters}
               >
                 Clear Filters
@@ -171,10 +173,11 @@ function Users() {
             </div>
           </div>
 
-          <div className="row mb-3">
+          <div className="row mb-3" style={{ gap: "0" }}>
             <div className="col-md-4">
               <button
                 className="btn btn-primary w-100"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 onClick={handleSortByName}
               >
                 Sort by Name
@@ -183,20 +186,28 @@ function Users() {
             <div className="col-md-4">
               <button
                 className="btn btn-primary w-100"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
                 onClick={handleSortByExperience}
               >
                 Sort by Experience
               </button>
             </div>
             <div className="col-md-4">
-              <Link to="/create" className="btn btn-success w-100">
+              <Link
+                to="/create"
+                className="btn btn-success w-100"
+                style={{ padding: "0.375rem 0.75rem", fontSize: "0.875rem" }}
+              >
                 Add User
               </Link>
             </div>
           </div>
 
           <div className="table-responsive">
-            <table className="table table-striped">
+            <table
+              className="table table-striped"
+              style={{ fontSize: "0.875rem" }}
+            >
               <thead>
                 <tr>
                   <th>Name</th>
@@ -221,12 +232,20 @@ function Users() {
                       <Link
                         to={`/update/${user._id}`}
                         className="btn btn-sm btn-success me-1"
+                        style={{
+                          fontSize: "0.75rem",
+                          padding: "0.25rem 0.5rem",
+                        }}
                       >
                         Update
                       </Link>
                       <button
                         className="btn btn-sm btn-danger"
                         onClick={() => handleDelete(user._id)}
+                        style={{
+                          fontSize: "0.75rem",
+                          padding: "0.25rem 0.5rem",
+                        }}
                       >
                         Delete
                       </button>
