@@ -12,7 +12,7 @@ app.use(express.json());
 require("dotenv").config(); // Load environment variables from .env file
 
 //local db (compass)
-// mongoose.connect("mongodb://localhost:27017/usersDB");
+//mongoose.connect("mongodb://localhost:27017/usersDB");
 
 // MongoDB Atlas connection string
 const uri = process.env.MONGODB_URI;
@@ -29,7 +29,6 @@ app.post("/createUser", (req, res) => {
     .catch((err) => res.status(400).json({ error: err.message }));
 });
 
-//Fetch users based on search
 app.get("/", (req, res) => {
   const {
     name,
@@ -38,41 +37,52 @@ app.get("/", (req, res) => {
     location,
     videoInterviewResults,
     codingInterviewResults,
+    sortBy,
   } = req.query;
-  const nameQuery = name ? { name: { $regex: name, $options: "i" } } : {};
-  const skillsQuery = skills
-    ? { skills: { $regex: skills, $options: "i" } }
-    : {};
-  const yearsOfExperienceQuery = yearsOfExperience
-    ? { yearsOfExperience: yearsOfExperience }
-    : {};
-  const locationQuery = location
-    ? { location: { $regex: location, $options: "i" } }
-    : {};
-  const videoInterviewResultsQuery = videoInterviewResults
-    ? {
-        videoInterviewResults: { $regex: videoInterviewResults, $options: "i" },
-      }
-    : {};
-  const codingInterviewResultsQuery = codingInterviewResults
-    ? {
-        codingInterviewResults: {
-          $regex: codingInterviewResults,
-          $options: "i",
-        },
-      }
-    : {};
 
-  const query = {
-    ...nameQuery,
-    ...skillsQuery,
-    ...yearsOfExperienceQuery,
-    ...locationQuery,
-    ...videoInterviewResultsQuery,
-    ...codingInterviewResultsQuery,
-  };
+  // Build query object based on provided filters
+  const query = {};
+
+  if (name) {
+    query.name = { $regex: name, $options: "i" };
+  }
+
+  if (skills) {
+    query.skills = { $regex: skills, $options: "i" };
+  }
+
+  if (yearsOfExperience) {
+    query.yearsOfExperience = parseInt(yearsOfExperience);
+  }
+
+  if (location) {
+    query.location = { $regex: location, $options: "i" };
+  }
+
+  if (videoInterviewResults) {
+    query.videoInterviewResults = {
+      $regex: videoInterviewResults,
+      $options: "i",
+    };
+  }
+
+  if (codingInterviewResults) {
+    query.codingInterviewResults = {
+      $regex: codingInterviewResults,
+      $options: "i",
+    };
+  }
+
+  // Sort options
+  let sortOptions = {};
+  if (sortBy === "name") {
+    sortOptions = { name: 1 }; // Sort by name ascending
+  } else if (sortBy === "yearsOfExperience") {
+    sortOptions = { yearsOfExperience: 1 }; // Sort by yearsOfExperience ascending
+  }
 
   UserModel.find(query)
+    .sort(sortOptions)
     .then((users) => res.json(users))
     .catch((err) => res.status(400).json({ error: err.message }));
 });
@@ -91,15 +101,16 @@ app.put("/updateUser/:id", (req, res) => {
     { _id: id },
     {
       name: req.body.name,
-      skils: req.body.skills,
+      skills: req.body.skills,
       yearsOfExperience: req.body.yearsOfExperience,
       location: req.body.location,
       videoInterviewResults: req.body.videoInterviewResults,
       codingInterviewResults: req.body.codingInterviewResults,
-    }
+    },
+    { new: true } // To return the updated document
   )
-    .then((users) => res.json(users))
-    .catch((err) => res.json(err));
+    .then((user) => res.json(user))
+    .catch((err) => res.status(400).json({ error: err.message }));
 });
 
 app.delete("/deleteUser/:id", (req, res) => {

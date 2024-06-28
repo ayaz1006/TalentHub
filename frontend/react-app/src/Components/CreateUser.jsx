@@ -29,7 +29,7 @@ const CreateUser = () => {
         console.log("Candidate added:", response.data);
         navigate("/");
 
-        // Optionally, clear form fields after submission
+        // clear form fields after submission
         setFormData({
           name: "",
           skills: "",
@@ -45,80 +45,110 @@ const CreateUser = () => {
   };
 
   return (
-    <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
-      <div className="w-50 bg-white rounded p-3">
-        <form onSubmit={handleSubmit}>
-          <h2>Add User</h2>
-          <div className="mb-2">
-            <label htmlFor="">Name</label>
-            <input
-              type="text"
-              placeholder="Enter Name"
-              className="form-control"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-2">
-            <label htmlFor="">Skills</label>
-            <input
-              type="text"
-              placeholder="Enter Skills"
-              className="form-control"
-              name="skills"
-              value={formData.skills}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-2">
-            <label htmlFor="">Years of Experience:</label>
-            <input
-              type="number"
-              placeholder="Enter Years of Experience"
-              className="form-control"
-              name="yearsOfExperience"
-              value={formData.yearsOfExperience}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-2">
-            <label htmlFor="">Location:</label>
-            <input
-              type="text"
-              placeholder="Enter Location"
-              className="form-control"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-2">
-            <label htmlFor="">Video Interview Results:</label>
-            <input
-              type="text"
-              placeholder="Video Interview Results"
-              className="form-control"
-              name="videoInterviewResults"
-              value={formData.videoInterviewResults}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-2">
-            <label htmlFor="">Coding Interview Results:</label>
-            <input
-              type="text"
-              placeholder="Coding Interview Results"
-              className="form-control"
-              name="codingInterviewResults"
-              value={formData.codingInterviewResults}
-              onChange={handleChange}
-            />
-          </div>
-          <button className="btn btn-success">Submit</button>
-        </form>
+    <div className="container mt-5">
+      <div className="card shadow">
+        <div className="card-body">
+          <h2 className="card-title text-center mb-4">Add User</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                className="form-control"
+                placeholder="Enter Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="skills" className="form-label">
+                Skills
+              </label>
+              <input
+                type="text"
+                id="skills"
+                className="form-control"
+                placeholder="Enter Skills"
+                name="skills"
+                value={formData.skills}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="yearsOfExperience" className="form-label">
+                Years of Experience
+              </label>
+              <input
+                type="number"
+                id="yearsOfExperience"
+                className="form-control"
+                placeholder="Enter Years of Experience"
+                name="yearsOfExperience"
+                value={formData.yearsOfExperience}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="location" className="form-label">
+                Location
+              </label>
+              <input
+                type="text"
+                id="location"
+                className="form-control"
+                placeholder="Enter Location"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="videoInterviewResults" className="form-label">
+                Video Interview Results
+              </label>
+              <input
+                type="text"
+                id="videoInterviewResults"
+                className="form-control"
+                placeholder="Video Interview Results"
+                name="videoInterviewResults"
+                value={formData.videoInterviewResults}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="codingInterviewResults" className="form-label">
+                Coding Interview Results
+              </label>
+              <input
+                type="text"
+                id="codingInterviewResults"
+                className="form-control"
+                placeholder="Coding Interview Results"
+                name="codingInterviewResults"
+                value={formData.codingInterviewResults}
+                onChange={handleChange}
+              />
+            </div>
+            <button type="submit" className="btn btn-success me-2">
+              Submit
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => navigate("/")}
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
 };
+
 export default CreateUser;

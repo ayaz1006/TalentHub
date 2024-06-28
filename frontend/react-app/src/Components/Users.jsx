@@ -1,137 +1,216 @@
-// Users.jsx
-
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 function Users() {
-  const [users, setUsers] = useState([]);
-
-  //search
-  const [searchTerms, setSearchTerms] = useState({
+  const initialFilterOptions = {
     name: "",
     skills: "",
     yearsOfExperience: "",
     location: "",
     videoInterviewResults: "",
     codingInterviewResults: "",
+  };
+
+  const [users, setUsers] = useState([]);
+  const [filterOptions, setFilterOptions] = useState({
+    ...initialFilterOptions,
   });
 
-  //search
   useEffect(() => {
-    const {
-      name,
-      skills,
-      yearsOfExperience,
-      location,
-      videoInterviewResults,
-      codingInterviewResults,
-    } = searchTerms;
+    fetchUsers();
+  }, [filterOptions]);
+
+  const fetchUsers = () => {
     axios
-      .get(
-        `https://talenthub-qdnv.onrender.com?name=${name}&skills=${skills}&yearsOfExperience=${yearsOfExperience}&location=${location}&videoInterviewResults=${videoInterviewResults}&codingInterviewResults=${codingInterviewResults}`
-      )
+      .get("https://talenthub-qdnv.onrender.com/", { params: filterOptions })
       .then((result) => setUsers(result.data))
       .catch((err) => console.log(err));
-  }, [searchTerms]);
+  };
 
   const handleDelete = (id) => {
     axios
-      .delete("https://talenthub-qdnv.onrender.com/deleteUser/" + id)
-      .then((res) => {
-        console.log(res);
-        window.location.reload();
+      .delete(`https://talenthub-qdnv.onrender.com/deleteUser/${id}`)
+      .then(() => {
+        fetchUsers(); // Refresh users after deletion
       })
       .catch((err) => console.log(err));
   };
 
-  return (
-    <div>
-      <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
-        <div className="w-50 bg-white rounded p-3">
-          {/* search*/}
-          <input
-            type="text"
-            placeholder="Search by Name"
-            className="form-control mb-3"
-            value={searchTerms.name}
-            onChange={(e) =>
-              setSearchTerms({ ...searchTerms, name: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Search by Skills"
-            className="form-control mb-3"
-            value={searchTerms.skills}
-            onChange={(e) =>
-              setSearchTerms({ ...searchTerms, skills: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Search by Years of Experience"
-            className="form-control mb-3"
-            value={searchTerms.yearsOfExperience}
-            onChange={(e) =>
-              setSearchTerms({
-                ...searchTerms,
-                yearsOfExperience: e.target.value,
-              })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Search by Location"
-            className="form-control mb-3"
-            value={searchTerms.location}
-            onChange={(e) =>
-              setSearchTerms({ ...searchTerms, location: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Search by Video Interview Results"
-            className="form-control mb-3"
-            value={searchTerms.videoInterviewResults}
-            onChange={(e) =>
-              setSearchTerms({
-                ...searchTerms,
-                videoInterviewResults: e.target.value,
-              })
-            }
-          />
-          <input
-            type="text"
-            placeholder="Search by Coding Interview Results"
-            className="form-control mb-3"
-            value={searchTerms.codingInterviewResults}
-            onChange={(e) =>
-              setSearchTerms({
-                ...searchTerms,
-                codingInterviewResults: e.target.value,
-              })
-            }
-          />
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilterOptions({ ...filterOptions, [name]: value });
+  };
 
-          <Link to="/create" className="btn btn-success">
-            Add +
-          </Link>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Skills</th>
-                <th>YOE</th>
-                <th>Location</th>
-                <th>VideoInterviewResults</th>
-                <th>CodingInterviewResults</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => {
-                return (
-                  <tr>
+  const clearFilters = () => {
+    setFilterOptions({ ...initialFilterOptions });
+  };
+
+  const handleSortByName = () => {
+    axios
+      .get("https://talenthub-qdnv.onrender.com/", {
+        params: { ...filterOptions, sortBy: "name" },
+      })
+      .then((result) => setUsers(result.data))
+      .catch((err) => console.log(err));
+  };
+
+  const handleSortByExperience = () => {
+    axios
+      .get("https://talenthub-qdnv.onrender.com/", {
+        params: { ...filterOptions, sortBy: "yearsOfExperience" },
+      })
+      .then((result) => setUsers(result.data))
+      .catch((err) => console.log(err));
+  };
+
+  return (
+    <div className="container mt-5">
+      <div className="card shadow">
+        <div className="card-body">
+          <h2 className="card-title text-center mb-4">Users List</h2>
+          <div className="row mb-3 align-items-center">
+            <div className="col-md-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by Name"
+                name="name"
+                value={filterOptions.name || ""}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col-md-3">
+              <select
+                className="form-control"
+                name="skills"
+                value={filterOptions.skills || ""}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Skills</option>
+                <option value="Javascript">Javascript</option>
+                <option value="Python">Python</option>
+                <option value="ReactJS">ReactJS</option>
+                <option value="NodeJS">NodeJS</option>
+                <option value="TypeScript">TypeScript</option>
+                <option value="Java">Java</option>
+                <option value="Next.js">Next.js</option>
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+              </select>
+            </div>
+            <div className="col-md-3">
+              <select
+                className="form-control"
+                name="yearsOfExperience"
+                value={filterOptions.yearsOfExperience || ""}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Years of Experience</option>
+                <option value="1">1 year</option>
+                <option value="2">2 years</option>
+                <option value="3">3 years</option>
+                <option value="4">4 years</option>
+                <option value="5">5 years</option>
+                <option value="6">6 years</option>
+                <option value="7">7 years</option>
+                <option value="8">8 years</option>
+                <option value="9">9 years</option>
+                <option value="10">10 years</option>
+              </select>
+            </div>
+            <div className="col-md-3">
+              <select
+                className="form-control"
+                name="location"
+                value={filterOptions.location || ""}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Location</option>
+                <option value="Bangalore">Bangalore</option>
+                <option value="Delhi-NCR">Delhi-NCR</option>
+                <option value="Pune">Pune</option>
+                <option value="Kolkata">Kolkata</option>
+                <option value="Mumbai">Mumbai</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="row mb-3 align-items-center">
+            <div className="col-md-3">
+              <select
+                className="form-control"
+                name="videoInterviewResults"
+                value={filterOptions.videoInterviewResults || ""}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Video Interview Results</option>
+                <option value="Pass">Pass</option>
+                <option value="Fail">Fail</option>
+              </select>
+            </div>
+            <div className="col-md-3">
+              <select
+                className="form-control"
+                name="codingInterviewResults"
+                value={filterOptions.codingInterviewResults || ""}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Coding Interview Results</option>
+                <option value="Pass">Pass</option>
+                <option value="Fail">Fail</option>
+              </select>
+            </div>
+            <div className="col-md-3">
+              <button
+                className="btn btn-secondary w-100"
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+
+          <div className="row mb-3">
+            <div className="col-md-4">
+              <button
+                className="btn btn-primary w-100"
+                onClick={handleSortByName}
+              >
+                Sort by Name
+              </button>
+            </div>
+            <div className="col-md-4">
+              <button
+                className="btn btn-primary w-100"
+                onClick={handleSortByExperience}
+              >
+                Sort by Experience
+              </button>
+            </div>
+            <div className="col-md-4">
+              <Link to="/create" className="btn btn-success w-100">
+                Add User
+              </Link>
+            </div>
+          </div>
+
+          <div className="table-responsive">
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Skills</th>
+                  <th>Years of Experience</th>
+                  <th>Location</th>
+                  <th>Video Interview Results</th>
+                  <th>Coding Interview Results</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((user) => (
+                  <tr key={user._id}>
                     <td>{user.name}</td>
                     <td>{user.skills}</td>
                     <td>{user.yearsOfExperience}</td>
@@ -141,22 +220,22 @@ function Users() {
                     <td>
                       <Link
                         to={`/update/${user._id}`}
-                        className="btn btn-success"
+                        className="btn btn-sm btn-success me-1"
                       >
                         Update
                       </Link>
                       <button
-                        className="btn btn-danger"
-                        onClick={(e) => handleDelete(user._id)}
+                        className="btn btn-sm btn-danger"
+                        onClick={() => handleDelete(user._id)}
                       >
                         Delete
                       </button>
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
