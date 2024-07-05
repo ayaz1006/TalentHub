@@ -16,16 +16,24 @@ function Users() {
   const [filterOptions, setFilterOptions] = useState({
     ...initialFilterOptions,
   });
+  const [loading, setLoading] = useState(false); // State to track loading
 
   useEffect(() => {
     fetchUsers();
   }, [filterOptions]);
 
   const fetchUsers = () => {
+    setLoading(true); // Set loading to true when fetching data
     axios
       .get("https://talenthub-qdnv.onrender.com/", { params: filterOptions })
-      .then((result) => setUsers(result.data))
-      .catch((err) => console.log(err));
+      .then((result) => {
+        setUsers(result.data);
+        setLoading(false); // Set loading to false when data is fetched
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false); // Ensure loading is set to false in case of error
+      });
   };
 
   const handleDelete = (id) => {
@@ -69,6 +77,8 @@ function Users() {
       <div className="card shadow">
         <div className="card-body">
           <h2 className="card-title text-center mb-4">Users List</h2>
+
+          {/* Filter Options */}
           <div className="row mb-3 align-items-center">
             <div className="col-md-3">
               <input
@@ -173,6 +183,7 @@ function Users() {
             </div>
           </div>
 
+          {/* Sorting Buttons */}
           <div className="row mb-3" style={{ gap: "0" }}>
             <div className="col-md-4">
               <button
@@ -203,6 +214,19 @@ function Users() {
             </div>
           </div>
 
+          {/* Loading Indicator */}
+          <div className="text-center mb-3">
+            {loading && (
+              <div>
+                <p>Loading data... Please wait for a few seconds</p>
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Users Table */}
           <div className="table-responsive">
             <table
               className="table table-striped"
