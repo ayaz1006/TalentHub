@@ -16,3 +16,6 @@
     <li><strong>Database:</strong> MongoDB (hosted on Render.com)</li>
     <li><strong>Styling:</strong> Bootstrap</li>
   </ul>
+
+<h2>Application Link</h2>
+  <p>Visit the TalentHub Management System application here: <a href="https://talentbase.netlify.app/">https://talentbase.netlify.app/</a></p>
